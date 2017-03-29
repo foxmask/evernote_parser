@@ -18,3 +18,4 @@ one folder is created by date, and note are created inside of them.
 If (py)pandoc is not able to convert a note (because of the very heavy weight), a script will be created to manually run the conversion
 
 
+([code based on this gist](https://gist.github.com/foxmask/7b29c43a161e001ff04afdb2f181e31c))
