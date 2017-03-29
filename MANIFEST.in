@@ -1,0 +1,7 @@
+include *.txt *.rst *.md
+exclude *.log
+exclude *.sh
+
+recursive-include config
+
+recursive-exclude * __pycache__
