@@ -72,7 +72,7 @@ def parse_note(note):
             if 'en-crypt' not in elem.text:
                 note_dict['content'] = parse_content(elem.text)
             else:
-                note_dict['content'] = parse_content('content is encypted. '
+                note_dict['content'] = parse_content('content is encrypted. '
                                                      'Note can not be displayed.'
                                                      ' Give up')
             # A copy of original content
@@ -141,14 +141,18 @@ def write_too_big(title, bak_file, text_file):
     :param text_file: 
     :return: 
     """
-    logger.warning(f'{title} too big - try to execute pandoc "{bak_file}"'
-                   f' -t {settings.TO_FORMAT} -f html -o "{text_file}"')
+    logger.warning('%s too big - try to execute pandoc "%s"'
+                   ' -t %s -f html -o "%s"' % (title, bak_file,
+                                               settings.TO_FORMAT,
+                                               text_file))
     # create a shell script that can be executed manually
     dir_path = os.path.dirname(os.path.realpath(__file__))
     shell = os.path.join(dir_path, 'evernote_import_manual.sh')
     with open(shell, 'a+') as fd:
-        line = f'pandoc "{bak_file}" -t {settings.TO_FORMAT} ' \
-               f'-f html -o "{text_file}"'
+        line = 'pandoc "{bak_file}" -t {to_format} -f html -o "{text_file}"'\
+            .format(bak_file=bak_file,
+                    to_format=settings.TO_FORMAT,
+                    text_file=text_file)
         fd.write(line + '\n')
 
 
