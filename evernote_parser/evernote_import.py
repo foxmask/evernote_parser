@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+import arrow
 from base64 import b64decode
 import hashlib
 import logging
@@ -164,7 +164,14 @@ def write_note(text_file, note):
     """
     with open(text_file, 'w') as fd:
         # Write the original title
-        fd.write(settings.HEADING1 + note['title'] + '\n')
+        if settings.TO_FORMAT == 'html':
+            fd.write(settings.HEADING1.format(note['title']) + '\n')
+            if 'created' in note:
+                fd.write(settings.DATE_CREATED.format(arrow.get(note['created'])) + '\n')
+            if 'updated' in note:
+                fd.write(settings.DATE_UPDATED.format(arrow.get(note['updated'])) + '\n')
+        else:
+            fd.write(settings.HEADING1 + note['title'] + '\n')
         fd.write(note['content'])
 
 
