@@ -7,13 +7,10 @@ TO_FORMAT = 'html'
 # file extension
 TO_FORMAT_EXT = 'html'
 # for the markdown H1 is #
-#  HEADING1 = '# '
-# DATE_CREATED = '{} '
-# DATE_UPDATED = '{} '
-#  for html
+# HEADING1 = '# '
+# for html
 # HEADING1 = '<h1>{}</h1> '
-# DATE_CREATED = '<meta http-equiv="created" content="{}" />'
-# DATE_UPDATED = '<meta http-equiv="last-modified" content="{}" />'
 HEADING1 = '<h1>{}</h1> '
-DATE_CREATED = '<meta name="DC.date.created" content="{}" />'
-DATE_UPDATED = '<meta name="DC.date.modified" content="{}" />'
+# add date of the note
+DATE_CREATED = 'created={}'
+DATE_UPDATED = 'modified={}'

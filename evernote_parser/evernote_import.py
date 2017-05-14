@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 import arrow
 from base64 import b64decode
 import hashlib
@@ -30,8 +31,8 @@ p = etree.XMLParser(remove_blank_text=True, resolve_entities=False)
 
 def parse_content(content):
     """
-    
-    :param content: 
+
+    :param content:
     :return: converted text
     """
     try:
@@ -44,9 +45,9 @@ def parse_content(content):
 
 def parse_resource(resource):
     """
-    
-    :param resource: 
-    :return: 
+
+    :param resource:
+    :return:
     """
     rsc_dict = {}
     for elem in resource:
@@ -61,9 +62,9 @@ def parse_resource(resource):
 
 
 def parse_note(note):
-    """    
-    :param note: 
-    :return: 
+    """
+    :param note:
+    :return:
     """
     note_dict = {}
     resources = []
@@ -73,7 +74,8 @@ def parse_note(note):
                 note_dict['content'] = parse_content(elem.text)
             else:
                 note_dict['content'] = parse_content('content is encrypted. '
-                                                     'Note can not be displayed.'
+                                                     'Note can not be '
+                                                     'displayed.'
                                                      ' Give up')
             # A copy of original content
             note_dict['content-raw'] = elem.text
@@ -96,9 +98,9 @@ def parse_note_xml(xml_file):
     Without huge_tree set to True, parser may complain about huge text node
     Try to recover, because there may be "&nbsp;", which will cause
     "XMLSyntaxError: Entity 'nbsp' not defined"
-    
-    :param xml_file: 
-    :return: 
+
+    :param xml_file:
+    :return:
     """
     context = etree.iterparse(xml_file,
                               encoding='utf-8',
@@ -113,11 +115,11 @@ def parse_note_xml(xml_file):
 def write_resource(note_dir, resources):
     """
     write the resource data
-    :param note_dir: 
-    :param resources: 
+    :param note_dir:
+    :param resources:
     """
     for resource in resources:
-        rsc_file = os.path.join(note_dir, resource['hash']+'.data')
+        rsc_file = os.path.join(note_dir, resource['hash'] + '.data')
         data = resource['data']
         with open(rsc_file, 'wb') as fd:
             fd.write(data)
@@ -125,9 +127,9 @@ def write_resource(note_dir, resources):
 
 def write_bak(bak_file, content_raw):
     """
-    write the 'raw' version of the note    
-    :param bak_file: 
-    :param content_raw: 
+    write the 'raw' version of the note
+    :param bak_file:
+    :param content_raw:
     """
     with open(bak_file, 'w') as fd:
         fd.write(content_raw)
@@ -135,11 +137,11 @@ def write_bak(bak_file, content_raw):
 
 def write_too_big(title, bak_file, text_file):
     """
-    
-    :param title: 
-    :param bak_file: 
-    :param text_file: 
-    :return: 
+
+    :param title:
+    :param bak_file:
+    :param text_file:
+    :return:
     """
     logger.warning('%s too big - try to execute pandoc "%s"'
                    ' -t %s -f html -o "%s"' % (title, bak_file,
@@ -159,27 +161,34 @@ def write_too_big(title, bak_file, text_file):
 def write_note(text_file, note):
     """
     write the content of the note
-    :param text_file: 
-    :param note: 
+    :param text_file:
+    :param note:
     """
+    now = arrow.utcnow()
     with open(text_file, 'w') as fd:
         # Write the original title
         if settings.TO_FORMAT == 'html':
             fd.write(settings.HEADING1.format(note['title']) + '\n')
-            if 'created' in note:
-                fd.write(settings.DATE_CREATED.format(arrow.get(note['created'])) + '\n')
-            if 'updated' in note:
-                fd.write(settings.DATE_UPDATED.format(arrow.get(note['updated'])) + '\n')
         else:
             fd.write(settings.HEADING1 + note['title'] + '\n')
+
+        if 'created' in note:
+            fd.write(settings.DATE_CREATED.format(arrow.get(note['created'])) + '\n')
+        else:
+            fd.write(settings.DATE_CREATED.format(arrow.get(now)) + '\n')
+        if 'updated' in note:
+            fd.write(settings.DATE_UPDATED.format(arrow.get(note['updated'])) + '\n')
+        else:
+            fd.write(settings.DATE_UPDATED.format(arrow.get(now)) + '\n')
+
         fd.write(note['content'])
 
 
 def get_export_dir(date):
     """
     get the directory where the file are exported
-    :param date: 
-    :return: path to the directory 
+    :param date:
+    :return: path to the directory
     """
     year = str(date.tm_year)
     mon = '%02d' % date.tm_mon
@@ -189,14 +198,16 @@ def get_export_dir(date):
 
 def export_note(note):
     """
-    Save notes and attachments in directories named according to date of creation  
-    :param note: 
+    Save notes and attachments in directories named
+    according to date of creation
+    :param note:
     """
     note_dir = get_export_dir(note['created'])
     os.makedirs(note_dir, exist_ok=True)
 
     # Remove "/" from filenames
     title = note['title'].replace('/', ' ')[:settings.TITLE_SIZE_LIMIT]
+
     text_file = os.path.join(note_dir, title + '.' + settings.TO_FORMAT_EXT)
 
     if 'too big' not in note['content']:
