@@ -7,10 +7,10 @@ TO_FORMAT = 'html'
 # file extension
 TO_FORMAT_EXT = 'html'
 # for the markdown H1 is #
-# HEADING1 = '# '
+# HEADING1 = '# {}'
 # for html
-# HEADING1 = '<h1>{}</h1> '
 HEADING1 = '<h1>{}</h1> '
+TITLE = 'title={}'
 # add date of the note
 DATE_CREATED = 'created={}'
 DATE_UPDATED = 'modified={}'

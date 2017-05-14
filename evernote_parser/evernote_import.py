@@ -167,10 +167,7 @@ def write_note(text_file, note):
     now = arrow.utcnow()
     with open(text_file, 'w') as fd:
         # Write the original title
-        if settings.TO_FORMAT == 'html':
-            fd.write(settings.HEADING1.format(note['title']) + '\n')
-        else:
-            fd.write(settings.HEADING1 + note['title'] + '\n')
+        fd.write(settings.TITLE.format(note['title']) + '\n')
 
         if 'created' in note:
             fd.write(settings.DATE_CREATED.format(arrow.get(note['created'])) + '\n')
@@ -181,6 +178,7 @@ def write_note(text_file, note):
         else:
             fd.write(settings.DATE_UPDATED.format(arrow.get(now)) + '\n')
 
+        fd.write(settings.HEADING1.format(note['title']) + '\n')
         fd.write(note['content'])
 
 
