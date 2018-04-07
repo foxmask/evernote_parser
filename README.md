@@ -1,7 +1,7 @@
 Evernote Parser
 ===============
 
-Split all Evernote notes in its own file from the our .enex file
+Split your exported file Evernote.enex into peaces of files, one by note, in the format you want, to be imported where you want.
 
 Using:
 -----
